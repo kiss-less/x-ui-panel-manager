@@ -70,12 +70,14 @@ class PanelAPI:
                 logger.info("Password has been generated")
                 url = f"{self.base_url}{endpoint}"
                 headers = self.headers | {"Content-Type": "application/x-www-form-urlencoded"}
+                if email == "":
+                    email = f"{remark}@{remark}.com" # Adding default email to avoid issue with 404 during the updateClient call
                 data = {
                     "remark": remark,
                     "enable": enable,
                     "port": port,
                     "protocol": protocol,
-                    "settings": f"{{\n  \"method\": \"{method}\",\n  \"password\": \"{password}\",\n  \"network\": \"tcp,udp\",\n  \"clients\": [\n    {{\n      \"method\": \"{method}\",\n      \"password\": \"{password}\",\n      \"email\": \"{email}\",\n      \"totalGB\": 0,\n      \"expiryTime\": {expiry_time},\n      \"enable\": true,\n      \"tgId\": \"{tg_id}\",\n      \"reset\": 0\n    }}\n  ]\n}}"
+                    "settings": f"{{\n  \"clients\": [\n    {{\n      \"email\": \"{email}\",\n      \"enable\": {str(enable).lower()},\n      \"expiryTime\": {expiry_time},\n      \"method\": \"{method}\",\n      \"password\": \"{password}\",\n      \"reset\": 0,\n      \"tgId\": \"{tg_id}\",\n      \"totalGB\": 0\n    }}\n  ],\n  \"method\": \"{method}\",\n  \"network\": \"tcp,udp\",\n  \"password\": \"{password}\"\n}}"
                 }
                 response = requests.post(url, data=data, headers=headers)
                 if response.status_code == 200 and response.json().get('success') == True:
