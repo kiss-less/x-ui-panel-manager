@@ -35,11 +35,11 @@ class PanelAPI:
             return {'success': False}
         else:
             url = f"{self.base_url}{endpoint}"
-            logger.info("Getting inbounds from {url}")
+            logger.info(f"Getting inbounds from {url}")
             response = requests.get(url, headers=self.headers)
 
             if response.status_code == 200:
-                logger.info(f"Got 200 from {url}")
+                logger.info(f"Got 200 from {url}") 
                 try:
                     return response.json()
                 except Exception as ex:
