@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
     
 def convert_unix(unix_timestamp: int, format: str = "%Y-%m-%d %H:%M:%S GMT"):
     if unix_timestamp > 0:
-        struct_time = time.gmtime(unix_timestamp)
+        struct_time = time.gmtime(unix_timestamp / 1000)
         return time.strftime(format, struct_time)
     else:
         return "0"
@@ -28,7 +28,7 @@ class Inbound:
         logger.info("Inbound object has been initialized")
 
 
-    def display_credentials(self, display_password: bool = False, unix_timestamp: bool = False):
+    def display_credentials(self, display_password: bool = False, unix_timestamp: bool = False, essential_only: bool = False):
         if display_password:
             password = self.password
         else:
@@ -39,4 +39,7 @@ class Inbound:
         else:
             expiry = convert_unix(self.expiry_time)
         
-        return f"Remark: {self.remark}, Email: {self.email}, Port: {self.port}, Encryption method: {self.method}, Password: {password}, Enabled: {self.enable}, Expity Time: {expiry}"
+        if essential_only:
+            return f"Remark: {self.remark}, Port: {self.port}, Password: {password}"
+        else:
+            return f"Remark: {self.remark}, Email: {self.email}, Port: {self.port}, Encryption method: {self.method}, Password: {password}, Enabled: {self.enable}, Expity Time: {expiry}"
