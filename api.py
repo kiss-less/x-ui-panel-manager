@@ -1,4 +1,5 @@
-import requests, logging, random, string
+import requests, logging, random, string, json
+from inbound import Inbound
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -82,7 +83,10 @@ class PanelAPI:
                 response = requests.post(url, data=data, headers=headers)
                 if response.status_code == 200 and response.json().get('success') == True:
                     logger.info("Inbound has been created")
-                    return response.json()
+                    created_inbound = response.json().get("obj")
+                    created_client = json.loads(created_inbound.get("settings")).get("clients")[0]
+                    inbound = Inbound(created_inbound.get("id"), created_inbound.get("remark"), port, created_inbound.get("protocol"), created_client.get("method"), created_client.get("password"), created_client.get("enable"), created_client.get("email"), created_client.get("tgId"), created_client.get("expiryTime"))
+                    return {'success': True, 'inbound': inbound}
                 else:
                     logger.error(f"Error during inbound creation! Response code: {response.status_code}")
                     return {'success': False}
