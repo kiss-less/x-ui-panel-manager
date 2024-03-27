@@ -92,3 +92,18 @@ class PanelAPI:
                     return {'success': False}
             else:
                 return {'success': False}
+
+    def update_inbound_expiry_date(self, id: int, new_data: dict, endpoint: str = "/xui/API/inbounds/update") -> dict:
+        logger.info(f"Updating inbound with id {id}. New inbound data: {new_data}")
+        if not "Cookie" in self.headers:
+            logger.error("Authenticate of add a cookie header manually first!")
+            return {'success': False}
+        else:
+            url = f"{self.base_url}{endpoint}/{id}"
+            headers = self.headers | {"Content-Type": "application/x-www-form-urlencoded"}
+            data = new_data
+            response = requests.post(url, data=data, headers=headers)
+            logger.info(response.status_code)
+            if response.status_code == 200 and response.json().get('success') == True:
+                logger.info("Inbound has been updated")
+                return {'success': True, 'response': response.json()}
