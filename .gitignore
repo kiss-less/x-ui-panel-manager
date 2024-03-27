@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-caller.py
+caller*.py
+test.json
 *.py[cod]
 *$py.class
 
