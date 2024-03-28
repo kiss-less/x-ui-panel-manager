@@ -9,7 +9,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class GSpreadsheet:
-    def __init__(self, credentials_file: str, spread_key: str, usernames_starting_column: int = 5, time_delta_start_date: str = "19.01.2023", strip_first_symbol_from_username: bool = True, worksheet_name: str = "Donations"):
+    def __init__(self, credentials_file: str, spread_key: str, usernames_starting_column: int = 5, time_delta_start_date: str = "20.12.2022", strip_first_symbol_from_username: bool = True, worksheet_name: str = "Donations"):
         result = {}
         gc = gspread.service_account(credentials_file)
         logger.debug(f"Connected to Google Spreadsheet using {credentials_file}")
